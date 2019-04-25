@@ -58,15 +58,15 @@ func main() {
 	<-make(chan struct{})
 }
 
-func newAgent(agent sshagent.Agent) *Agent {
+func newAgent(agent sshagent.ExtendedAgent) *Agent {
 	return &Agent{
-		Agent: agent,
-		certs: make(map[string][]*ssh.Certificate),
+		ExtendedAgent: agent,
+		certs:         make(map[string][]*ssh.Certificate),
 	}
 }
 
 type Agent struct {
-	sshagent.Agent
+	sshagent.ExtendedAgent
 	certs map[string][]*ssh.Certificate
 }
 
@@ -76,7 +76,7 @@ func (a *Agent) addCert(cert *ssh.Certificate) {
 }
 
 func (a *Agent) List() ([]*sshagent.Key, error) {
-	keys, err := a.Agent.List()
+	keys, err := a.ExtendedAgent.List()
 	if err != nil {
 		return nil, err
 	}
